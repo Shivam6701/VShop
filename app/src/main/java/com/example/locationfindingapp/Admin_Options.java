@@ -31,7 +31,10 @@ public class Admin_Options extends AppCompatActivity {
     }
 
     public void btnDeleteItem(View v)
-    {}
+    {
+        Intent intent = new Intent(Admin_Options.this,Admin_Delete.class);
+        startActivity(intent);
+    }
 
 
 }
