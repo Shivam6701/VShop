@@ -3,6 +3,7 @@ package com.example.locationfindingapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,7 @@ public class Admin_Update extends AppCompatActivity {
         btnUpd=(Button)findViewById(R.id.btnUpd);
 
         tvUpdate=(TextView)findViewById(R.id.tvUpdate);
+
 
         setDetails();
         btnUpd.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +119,7 @@ public class Admin_Update extends AppCompatActivity {
                     .append(MainActivity.list.get(i).getDescription())
                     .append("\n");
         }
+        tvUpdate.setMovementMethod(new ScrollingMovementMethod());
         tvUpdate.setText(details);
 
     }
