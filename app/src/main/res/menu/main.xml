@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/location"
+        android:orderInCategory="100"
+        android:title="Refresh"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/userName"
+        android:title="Item"
+        app:showAsAction="never"
+
+            />
+    <item
+        android:id="@+id/sign_out"
+
+        android:orderInCategory="100"
+        android:title="Sign out"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/admin"
+
+        android:orderInCategory="100"
+        android:title="Admin"
+        android:visible="false"
+        app:showAsAction="never" />
+
+</menu>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1098280021488",
+    "firebase_url": "https://location-finding-app-d36f0-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "location-finding-app-d36f0",
+    "storage_bucket": "location-finding-app-d36f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098280021488:android:286c37b131527e974cc135",
+        "android_client_info": {
+          "package_name": "com.example.locationfindingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098280021488-6tj949cqbiqpgn2ntifi4i3u43jrm07q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.locationfindingapp",
+            "certificate_hash": "e0858c3fbc27292d99bfe2af8bb022f29374f639"
+          }
+        },
+        {
+          "client_id": "1098280021488-ksn9aj3835k1ilndcj535g3o6vnq7jl6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5eI6Im7ymUp_cF_3cZHQ5yqdU0GSFOJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098280021488-ksn9aj3835k1ilndcj535g3o6vnq7jl6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
