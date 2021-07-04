@@ -8,12 +8,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,17 +25,23 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentData;
+import com.razorpay.PaymentResultWithDataListener;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class ActivityOrder extends AppCompatActivity {
+public class ActivityOrder extends AppCompatActivity implements PaymentResultWithDataListener {
     int CODE_FOR_F_LOCATION = 66;
+    private static final String TAG = ActivityOrder.class.getSimpleName();
     TextView tvdetails,tvTotalPrice,tvAddress;
     ArrayList<Integer> dataNum;
-    Button btnAddress,btnrefreshAdd;
+    Button btnAddress,btnrefreshAdd,btnpay;
     Geocoder geocoder;
     List<Address> addresses;
     public static Location lastLocation;
@@ -50,6 +60,7 @@ public class ActivityOrder extends AppCompatActivity {
         tvAddress= findViewById(R.id.tvAddress);
         tvAddress.setVisibility(View.INVISIBLE);
         btnrefreshAdd= findViewById(R.id.btnRefreshAdd);
+        btnpay=findViewById(R.id.btnpay);
         dataNum=getIntent().getIntegerArrayListExtra("orderlist");
         StringBuilder summary = new StringBuilder();
         btnrefreshAdd.setVisibility(View.INVISIBLE);
@@ -82,8 +93,45 @@ public class ActivityOrder extends AppCompatActivity {
                 getlocation();
             }
         });
+        int amount = Math.round(totalPrice)*100;
+        final Activity activity = this;
+        btnpay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Test mode payment without order id created on server
 
+                Checkout.preload(getApplicationContext());
 
+                Checkout checkout=new Checkout();
+                checkout.setKeyID("rzp_test_Iu2ZSzm9N9FKtm");
+                try {
+                    JSONObject options = new JSONObject();
+                    options.put("name", MainActivity.username);
+                    options.put("description", "Testing");
+                    options.put("send_sms_hash",true);
+                    options.put("allow_rotation", true);
+                    //You can omit the image option to fetch the image from dashboard
+                    options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
+                    options.put("currency", "INR");
+                    //create order id on server with order Api of Razorpay
+                    //options.put("order_id",ORDER_ID);
+                    options.put("amount", amount);
+
+                    JSONObject preFill = new JSONObject();
+                    preFill.put("email", MainActivity.userEmail);
+                    preFill.put("contact", "9876543210");
+
+                    options.put("prefill", preFill);
+
+                    checkout.open(activity, options);
+                } catch (Exception e) {
+                    Toast.makeText(activity, "Error in payment: " + e.getMessage(), Toast.LENGTH_SHORT)
+                            .show();
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
     private void Locationgranted(Location location) throws IOException {
         geocoder=new Geocoder(this, Locale.getDefault());
@@ -173,6 +221,39 @@ public class ActivityOrder extends AppCompatActivity {
 
 
             }
+        }
+
+    }
+
+    @Override
+    public void onPaymentSuccess(String s, PaymentData paymentData) {
+        try {
+            Toast.makeText(this, "Payment Successful: " + s, Toast.LENGTH_SHORT).show();
+
+            Intent intent=new Intent(ActivityOrder.this,PaymentSuccess.class);
+
+            intent.putExtra("oid",paymentData.getOrderId());
+            intent.putExtra("pid",paymentData.getPaymentId());
+            intent.putExtra("sig",paymentData.getSignature());
+            //verify signature on server
+            startActivity(intent);
+            finish();
+
+
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in onPaymentSuccess", e);
+        }
+
+    }
+
+    @Override
+    public void onPaymentError(int i, String s, PaymentData paymentData) {
+        try {
+            Toast.makeText(this, "Payment failed: " + s + " " , Toast.LENGTH_SHORT).show();
+
+
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in onPaymentError", e);
         }
 
     }

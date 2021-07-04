@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
 
     Counter count = new Counter();
     Intent intent;
-    String username,userid,userEmail;
+    public  static String username,userid,userEmail;
     String ADMIN_EMAIL = "shivamkumar67016@gmail.com";
     EditText et;
     public static ArrayList<ShopData> list;
