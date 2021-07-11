@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,11 +21,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
@@ -46,6 +51,7 @@ public class ActivityOrder extends AppCompatActivity implements PaymentResultWit
     List<Address> addresses;
     public static Location lastLocation;
 
+
     float totalPrice=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,7 @@ public class ActivityOrder extends AppCompatActivity implements PaymentResultWit
         tvAddress.setVisibility(View.INVISIBLE);
         btnrefreshAdd= findViewById(R.id.btnRefreshAdd);
         btnpay=findViewById(R.id.btnpay);
+
         dataNum=getIntent().getIntegerArrayListExtra("orderlist");
         StringBuilder summary = new StringBuilder();
         btnrefreshAdd.setVisibility(View.INVISIBLE);
@@ -99,6 +106,10 @@ public class ActivityOrder extends AppCompatActivity implements PaymentResultWit
             @Override
             public void onClick(View v) {
                 //Test mode payment without order id created on server
+                update_database();
+
+
+
 
                 Checkout.preload(getApplicationContext());
 
@@ -132,6 +143,26 @@ public class ActivityOrder extends AppCompatActivity implements PaymentResultWit
 
             }
         });
+    }
+
+
+    private void update_database() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://location-finding-app-d36f0-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        LinearLayout llProgressBar=(LinearLayout)findViewById(R.id.llProgressBar);
+        llProgressBar.setVisibility(View.VISIBLE);
+        for(int i=0;i<dataNum.size();i++)
+        {
+            if(dataNum.get(i)>0)
+            {
+
+                String ukey=MainActivity.list.get(i).getId();
+                int newNo=Integer.parseInt(MainActivity.list.get(i).getNumberAvailable())-dataNum.get(i);
+                DatabaseReference myRef = database.getReference().child("productlist").child(ukey);
+                myRef.child("numberAvailable").setValue(newNo);
+            }
+        }
+
+        llProgressBar.setVisibility(View.GONE);
     }
     private void Locationgranted(Location location) throws IOException {
         geocoder=new Geocoder(this, Locale.getDefault());

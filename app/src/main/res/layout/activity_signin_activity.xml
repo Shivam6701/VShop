@@ -16,4 +16,10 @@
         android:background="#EDE2E2"
         android:clickable="true" />
 
+    <include
+        android:id="@+id/loading_bar"
+        layout="@layout/circular_loading_screen"
+        android:visibility="gone"
+         />
+
 </LinearLayout>

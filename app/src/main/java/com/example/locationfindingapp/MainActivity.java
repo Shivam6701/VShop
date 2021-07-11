@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
     int RETURN_CODE = 35;
     RecyclerView recyclerView;
     DataAdapter adapter;
+    LinearLayout llProgressBar;
 
     Counter count = new Counter();
     Intent intent;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        llProgressBar=findViewById(R.id.llProgressBar);
         ActionBar actionBar=getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("title");
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
     }
 
         public void DataSource()
-        {
+        {llProgressBar.setVisibility(View.VISIBLE);
 
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = firebaseDatabase.getReference().child("productlist");
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
 
                 }
             });
+           llProgressBar.setVisibility(View.GONE);
         }
 
 

@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class Admin_Delete extends AppCompatActivity {
     TextView tvDelete;
@@ -19,6 +23,9 @@ public class Admin_Delete extends AppCompatActivity {
     EditText etDid;
     Button btndelid;
     String ukey;
+    int uid;
+    FirebaseStorage storage;
+    StorageReference storageReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +51,7 @@ public class Admin_Delete extends AppCompatActivity {
         {
 
             try {
-                int uid = Integer.parseInt(ukey) - 1;
+                uid = Integer.parseInt(ukey) - 1;
                 ukey=MainActivity.list.get(uid).getId().toString();
                 if(!ukey.isEmpty())
                 {
@@ -65,9 +72,19 @@ public class Admin_Delete extends AppCompatActivity {
     private void update_database() {
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://location-finding-app-d36f0-default-rtdb.asia-southeast1.firebasedatabase.app/");
         DatabaseReference myRef = database.getReference().child("productlist").child(ukey);
-        myRef.removeValue();
-        Toast.makeText(Admin_Delete.this, "Values updated", Toast.LENGTH_SHORT).show();
-        etDid.setText("");
+
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReferenceFromUrl(MainActivity.list.get(uid).getImgurl());
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("Picture","#deleted");
+                myRef.removeValue();
+                Toast.makeText(Admin_Delete.this, "Values updated", Toast.LENGTH_SHORT).show();
+                etDid.setText("");
+            }
+        });
+
     }
 
     public void setDetails()

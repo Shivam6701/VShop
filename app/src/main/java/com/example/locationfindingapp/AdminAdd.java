@@ -39,9 +39,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.UUID;
 
-public class AdminArea extends AppCompatActivity {
+public class AdminAdd extends AppCompatActivity {
     EditText etAvailable,etItemName,etprice,etdesc;
     private static final String TAG = "Error";
     TextView tvshowlastdata;
@@ -84,9 +83,9 @@ public class AdminArea extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                if(ContextCompat.checkSelfPermission(AdminArea.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                if(ContextCompat.checkSelfPermission(AdminAdd.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                 {
-                    ActivityCompat.requestPermissions(AdminArea.this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},CODE_FOR_ST);
+                    ActivityCompat.requestPermissions(AdminAdd.this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},CODE_FOR_ST);
                 }
 
                 SelectImage();
@@ -106,7 +105,7 @@ public class AdminArea extends AppCompatActivity {
             }
             else if (grantResults[0]==PackageManager.PERMISSION_DENIED)
             {
-                if(ActivityCompat.shouldShowRequestPermissionRationale(AdminArea.this,Manifest.permission.READ_EXTERNAL_STORAGE))  //for deny
+                if(ActivityCompat.shouldShowRequestPermissionRationale(AdminAdd.this,Manifest.permission.READ_EXTERNAL_STORAGE))  //for deny
                 {
 
                     AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -116,14 +115,14 @@ public class AdminArea extends AppCompatActivity {
                     dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(AdminArea.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CODE_FOR_ST);
+                            ActivityCompat.requestPermissions(AdminAdd.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CODE_FOR_ST);
 
                         }
                     });
                     dialog.setNegativeButton("NO THANKS", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(AdminArea.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AdminAdd.this, "Cancelled", Toast.LENGTH_SHORT).show();
                         }
                     });
                     dialog.show();
@@ -277,7 +276,7 @@ public class AdminArea extends AppCompatActivity {
                                     // Dismiss dialog
                                     progressDialog.dismiss();
                                     Toast
-                                            .makeText(AdminArea.this,
+                                            .makeText(AdminAdd.this,
                                                     "Data Uploaded!!",
                                                     Toast.LENGTH_SHORT)
                                             .show();
@@ -292,7 +291,7 @@ public class AdminArea extends AppCompatActivity {
                             // Error, Image not uploaded
                             progressDialog.dismiss();
                             Toast
-                                    .makeText(AdminArea.this,
+                                    .makeText(AdminAdd.this,
                                             "Failed " + e.getMessage(),
                                             Toast.LENGTH_SHORT)
                                     .show();

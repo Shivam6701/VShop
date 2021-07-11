@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -32,13 +33,14 @@ public class signin_activity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
-
+    LinearLayout loading_bar;
     private  FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_signin_activity);
+        loading_bar=findViewById(R.id.loading_bar);
         ActionBar actionBar=getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("Sign in...");
@@ -74,6 +76,7 @@ public class signin_activity extends AppCompatActivity {
         if(currentUser==null)
         {
             signInButton.setVisibility(View.VISIBLE);
+
         }
         else
         {
@@ -86,6 +89,7 @@ public class signin_activity extends AppCompatActivity {
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -107,7 +111,7 @@ public class signin_activity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        loading_bar.setVisibility(View.VISIBLE);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
@@ -140,7 +144,7 @@ public class signin_activity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if(user!=null)
         {
-
+            loading_bar.setVisibility(View.GONE);
             Intent intent=new Intent(signin_activity.this,MainActivity.class);
             intent.putExtra("uid", user.getUid());
             intent.putExtra("name", user.getDisplayName());

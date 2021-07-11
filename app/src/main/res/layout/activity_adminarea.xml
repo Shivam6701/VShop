@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:scrollbars="vertical"
-    tools:context=".AdminArea">
+    tools:context=".AdminAdd">
 
     <EditText
         android:id="@+id/etitemname"

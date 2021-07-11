@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 public class Admin_Options extends AppCompatActivity {
 
@@ -21,7 +20,7 @@ public class Admin_Options extends AppCompatActivity {
     }
     public void btnAddItem(View v)
     {
-        Intent intent = new Intent(Admin_Options.this,AdminArea.class);
+        Intent intent = new Intent(Admin_Options.this, AdminAdd.class);
         startActivity(intent);
     }
     public void btnEditItem(View v)

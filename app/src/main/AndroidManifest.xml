@@ -20,7 +20,7 @@
         <activity android:name=".Admin_Options" />
         <activity android:name=".ActivityDescription" />
         <activity android:name=".ActivityOrder" />
-        <activity android:name=".AdminArea" />
+        <activity android:name=".AdminAdd" />
         <activity android:name=".MainActivity" />
         <activity android:name=".signin_activity">
             <intent-filter>
