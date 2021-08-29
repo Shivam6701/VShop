@@ -14,12 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationFindingApp">
-        <activity android:name=".PaymentSuccess"></activity>
+        <activity android:name=".MyOrderActivity"></activity>
+        <activity android:name=".OrderFailure" />
+        <activity android:name=".OrderSuccess" />
         <activity android:name=".Admin_Delete" />
         <activity android:name=".Admin_Update" />
         <activity android:name=".Admin_Options" />
         <activity android:name=".ActivityDescription" />
-        <activity android:name=".ActivityOrder" />
+        <activity android:name=".ActivityCart" />
         <activity android:name=".AdminAdd" />
         <activity android:name=".MainActivity" />
         <activity android:name=".signin_activity">

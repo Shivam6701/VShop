@@ -60,7 +60,7 @@ public class Admin_Update extends AppCompatActivity {
 
             try {
                 uid=Integer.parseInt(ukey)-1;
-                ukey=MainActivity.list.get(uid).getId().toString();
+                ukey= MainActivity.list.get(uid).getId();
                 if(!ukey.isEmpty() && (!una.isEmpty() || !udes.isEmpty() || !uprice.isEmpty() || !uname.isEmpty()))
                 {
                     update_database();

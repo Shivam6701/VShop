@@ -52,7 +52,7 @@ public class Admin_Delete extends AppCompatActivity {
 
             try {
                 uid = Integer.parseInt(ukey) - 1;
-                ukey=MainActivity.list.get(uid).getId().toString();
+                ukey= MainActivity.list.get(uid).getId();
                 if(!ukey.isEmpty())
                 {
                     update_database();

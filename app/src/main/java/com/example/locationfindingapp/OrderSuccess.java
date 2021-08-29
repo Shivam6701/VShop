@@ -5,29 +5,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-public class PaymentSuccess extends AppCompatActivity {
+public class OrderSuccess extends AppCompatActivity {
     TextView tvPayData;
     Button btnTrack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment_success);
+        setContentView(R.layout.activity_order_success);
         tvPayData=findViewById(R.id.tvPayData);
         btnTrack=findViewById(R.id.btnTrack);
-        String oid= getIntent().getStringExtra("oid");
+       /* String oid= getIntent().getStringExtra("oid");
         String pid= getIntent().getStringExtra("pid");
         String sig= getIntent().getStringExtra("sig");
         String data="Order id :- "+ oid+"\n"+
                 "Payment id :- "+pid+"\n"+
                 "Signature:- "+sig;
         tvPayData.setText(data);
+   */
 
         LottieAnimationView animationView=findViewById(R.id.tickSuccess);
         animationView.addAnimatorListener(new Animator.AnimatorListener() {
@@ -54,6 +54,8 @@ public class PaymentSuccess extends AppCompatActivity {
 
             }
         });
+        for(int i=0;i<MainActivity.list.size();i++)
+            MainActivity.itemCount.set(i,0);
 
     }
 }

@@ -24,7 +24,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
 
 
     private final ArrayList<ShopData> values;
-    List<Integer> count;
     ItemClicked activity;
     public interface ItemClicked
     {
@@ -32,16 +31,14 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
     }
 
 
-    public DataAdapter(Context context, ArrayList<ShopData> values, List<Integer> count) {
+    public DataAdapter(Context context, ArrayList<ShopData> values) {
         this.values = values;
-        this.count=count;
-
         activity=(ItemClicked) context;
     }
 
     public List getCount()
     {
-        return count;
+        return MainActivity.itemCount;
     }
     // private final Location cl;
 
@@ -59,7 +56,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
             super(itemView);
             tvName= itemView.findViewById(R.id.tvname);
             ivpimg=itemView.findViewById(R.id.ivpimg);
-            etCountNumber = itemView.findViewById(R.id.etCountNumber);
+            //etCountNumber = itemView.findViewById(R.id.etCountNumber);
             btnMinus= itemView.findViewById(R.id.btnMinus);
             btnPlus= itemView.findViewById(R.id.btnPlus);
             tvPrice= itemView.findViewById(R.id.tvPrice);
@@ -117,34 +114,31 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 
+
         holder.itemView.setTag(values.get(position));
         holder.tvName.setText(values.get(position).getName());
         Picasso.get().load(values.get(position).getImgurl()).into(holder.ivpimg);
 
         holder.tvPrice.setText(String.valueOf(values.get(position).getPrice()));
-        holder.etCountNumber.setText(String.valueOf(count.get(position)));
+
         holder.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int c =Integer.parseInt(String.valueOf(holder.etCountNumber.getText()));
-                c++;
-                count.set(position,c);
-                holder.etCountNumber.setText(String.valueOf(c));
+
+                MainActivity.itemCount.set(position,1);
+                holder.btnPlus.setVisibility(View.GONE);
+                holder.btnMinus.setVisibility(View.VISIBLE);
+
             }
         });
         holder.btnMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                int c =Integer.parseInt(String.valueOf(holder.etCountNumber.getText()));
-                if(c>0) {
-                    c--;
-                    count.set(position, c);
-                    holder.etCountNumber.setText(String.valueOf(c));
-                }
+                    MainActivity.itemCount.set(position,0);
+                holder.btnMinus.setVisibility(View.GONE);
+                holder.btnPlus.setVisibility(View.VISIBLE);
             }
         });
-
 
     }
 

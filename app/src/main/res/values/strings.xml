@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">Location Finding app</string>
+    <string name="app_name">EShop</string>
+
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 
 </resources>
