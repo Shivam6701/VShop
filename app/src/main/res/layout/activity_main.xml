@@ -21,7 +21,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/indiList"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
             android:visibility="visible"

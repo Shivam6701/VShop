@@ -11,6 +11,7 @@ public class OrderData {
     private  String latitude;
     private String longitude;
     private String itemDetail;
+    private String orderId;
 
     public OrderData(String userId, String userName, String userEmail, String price, String latitude, String longitude, String itemDetail) {
         this.userId = userId;
@@ -21,14 +22,23 @@ public class OrderData {
         this.longitude = longitude;
         this.itemDetail = itemDetail;
     }
-    public OrderData(String userEmail, String price,String itemDetail) {
-        this.userEmail = userEmail;
+    public OrderData(String price,String itemDetail, String orderId) {
+
         this.price = price;
         this.itemDetail = itemDetail;
+        this.orderId=orderId;
     }
 
     public String getItemDetail() {
         return itemDetail;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public void setItemDetail(String itemDetail) {

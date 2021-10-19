@@ -9,8 +9,10 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -30,9 +32,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ActivityCart extends AppCompatActivity  {
@@ -41,6 +45,7 @@ public class ActivityCart extends AppCompatActivity  {
     TextView tvdetails,tvTotalPrice,tvAddress;
     Button btnAddress,btnrefreshAdd,btnpay;
     Geocoder geocoder;
+    List<Integer> itemCount;
     List<Address> addresses;
     public static Location lastLocation;
     HashMap<String,String> item=new HashMap<>();
@@ -63,22 +68,33 @@ public class ActivityCart extends AppCompatActivity  {
         btnrefreshAdd= findViewById(R.id.btnRefreshAdd);
         btnpay=findViewById(R.id.btnpay);
         btnpay.setVisibility(View.GONE);
-
+        btnAddress.setVisibility(View.INVISIBLE);
         summary = new StringBuilder();
         btnrefreshAdd.setVisibility(View.INVISIBLE);
-        for(int i=0;i<MainActivity.itemCount.size();i++)
-        {
-            if(MainActivity.itemCount.get(i)>0)
-            {
-                summary.append(MainActivity.list.get(i).getName()).append(" : ").append(MainActivity.itemCount.get(i)).append("x");
-                summary.append(MainActivity.list.get(i).getPrice()).append("\n");
-                totalPrice+=((MainActivity.itemCount.get(i))*(Float.parseFloat(MainActivity.list.get(i).getPrice())));
-                item.put(MainActivity.list.get(i).getId()+"++"+MainActivity.list.get(i).getName(),MainActivity.itemCount.get(i).toString()+"X"+(MainActivity.list.get(i).getPrice()));
-            }
+        SharedPreferences prefA= getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE);
+        Map<String, Integer> allEntries = (Map<String, Integer>) prefA.getAll();
+        itemCount=new ArrayList<Integer>();
+        for (Map.Entry<String, Integer> entry : allEntries.entrySet()) {
+           for(int i=0;i<MainActivity.list.size();i++) {
+               itemCount.add(0);
+               if (MainActivity.list.get(i).getId().equals(entry.getKey()) && entry.getValue() > 0)
+
+                   {
+                       itemCount.add(i,entry.getValue());
+                       summary.append(MainActivity.list.get(i).getName()).append(" : ").append(entry.getValue()).append("x");
+                       summary.append(MainActivity.list.get(i).getPrice()).append("\n");
+                       totalPrice += ((entry.getValue()) * (Float.parseFloat(MainActivity.list.get(i).getPrice())));
+                       item.put(MainActivity.list.get(i).getId() + "++" + MainActivity.list.get(i).getName(), entry.getValue().toString() + "X" + (MainActivity.list.get(i).getPrice()));
+                   }
+           }
         }
         tvdetails.setText(summary);
         String tp = "Total Price : "+ totalPrice;
         tvTotalPrice.setText(tp);
+        if(totalPrice>0)
+            btnAddress.setVisibility(View.VISIBLE);
+        else
+            btnAddress.setVisibility(View.INVISIBLE);
         btnAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +102,7 @@ public class ActivityCart extends AppCompatActivity  {
                 btnAddress.setVisibility(View.GONE);
                 tvAddress.setVisibility(View.VISIBLE);
                 btnrefreshAdd.setVisibility(View.VISIBLE);
-                btnpay.setVisibility(View.VISIBLE);
+
             }
         });
         btnrefreshAdd.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +111,6 @@ public class ActivityCart extends AppCompatActivity  {
                 getlocation();
             }
         });
-        int amount = Math.round(totalPrice)*100;
         final Activity activity = this;
         btnpay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +124,7 @@ public class ActivityCart extends AppCompatActivity  {
         });
 
     }
+
     private void create_order() {
         LinearLayout llProgressBar=(LinearLayout)findViewById(R.id.AOllProgressBar);
         llProgressBar.setVisibility(View.VISIBLE);
@@ -143,14 +159,13 @@ public class ActivityCart extends AppCompatActivity  {
 
     private void update_database() {
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://location-finding-app-d36f0-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        for(int i=0;i<MainActivity.itemCount.size();i++)
+        for(int i=0;i<itemCount.size();i++)
         {
-            if(MainActivity.itemCount.get(i)>0)
+            if(itemCount.get(i)>0)
             {
                 String ukey=MainActivity.list.get(i).getId();
-                String newNo=String.valueOf(Integer.parseInt(MainActivity.list.get(i).getNumberAvailable())-MainActivity.itemCount.get(i));
+                String newNo=String.valueOf(Integer.parseInt(MainActivity.list.get(i).getNumberAvailable())-itemCount.get(i));
                 DatabaseReference myRef = database.getReference().child("productlist").child(ukey);
-
                 myRef.child("numberAvailable").setValue(newNo);
             }
         }
@@ -221,6 +236,7 @@ public class ActivityCart extends AppCompatActivity  {
                         .addOnSuccessListener(this, location -> {
                             if (location != null) {
                                 try {
+                                    btnpay.setVisibility(View.VISIBLE);
 
                                     Locationgranted(location);
                                 } catch (IOException e) {

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,9 +18,9 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 public class ActivityDescription extends AppCompatActivity {
-    TextView tvdes;
+    TextView tvdes,tvDesName,tvDesPrice;
     ImageView ivIImg;
-    Button btnDesMinus,btnDesPlus;
+    Button btnDesMinus,btnDesPlus,button2cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,48 +30,67 @@ public class ActivityDescription extends AppCompatActivity {
         ivIImg=findViewById(R.id.ivIImg);
         btnDesMinus=findViewById(R.id.btnDesMinus);
         btnDesPlus=findViewById(R.id.btnDesPlus);
-
+        button2cart=findViewById(R.id.button2cart);
+        tvDesName=findViewById(R.id.tvDesName);
+        tvDesPrice=findViewById(R.id.tvDesPrice);
         ActionBar actionBar=getSupportActionBar();
         assert actionBar != null;
 
         int index = (getIntent().getIntExtra("Idclick",-1));
+        SharedPreferences cartprefs=getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE);
+        String id=MainActivity.list.get(index).getId();
+        int btnType = cartprefs.getInt(id,0);
 
         if(index!=-1) {
             tvdes.setText(MainActivity.list.get(index).getDescription());
-           if(MainActivity.itemCount.get(index)==0)
+           if(btnType==0)
            {
                btnDesPlus.setVisibility(View.VISIBLE);
            }
            else
                btnDesMinus.setVisibility(View.VISIBLE);
-            actionBar.setTitle(MainActivity.list.get(index).getName());
+            //actionBar.setTitle(MainActivity.list.get(index).getName());
+            actionBar.hide();
+            tvDesName.setText(MainActivity.list.get(index).getName());
+            tvDesPrice.setText(new StringBuilder().append(R.string.Rs).append(" ").append(MainActivity.list.get(index).getPrice()).toString());
             if(MainActivity.list.get(index).getImgurl()!=null)
             Picasso.get().load(MainActivity.list.get(index).getImgurl()).into(ivIImg);
-
-        btnDesPlus.setOnClickListener(new View.OnClickListener() {
+            btnDesPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                MainActivity.itemCount.set(index,1);
                 btnDesPlus.setVisibility(View.GONE);
                 btnDesMinus.setVisibility(View.VISIBLE);
+                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE).edit();
+                editor.putInt(id,1);
+                editor.apply();
 
             }
         });
         btnDesMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                MainActivity.itemCount.set(index,0);
                 btnDesMinus.setVisibility(View.GONE);
                 btnDesPlus.setVisibility(View.VISIBLE);
-
+                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE).edit();
+                editor.putInt(id,0);
+                editor.apply();
             }
         });
+
+        button2cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ActivityDescription.this, ActivityCart.class);
+                startActivity(intent);
+            }
+        });
+
 
         }
         else
             Toast.makeText(ActivityDescription.this, "Error", Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -89,4 +109,7 @@ public class ActivityDescription extends AppCompatActivity {
         setResult(RESULT_OK,intent);
         finish();
     }
+
+
+
 }

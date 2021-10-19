@@ -2,6 +2,7 @@ package com.example.locationfindingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,11 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
+
+
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
 
-
+    Context context;
     private final ArrayList<ShopData> values;
     ItemClicked activity;
     public interface ItemClicked
@@ -30,16 +34,16 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
         void onItemClicked(int index);
     }
 
-
     public DataAdapter(Context context, ArrayList<ShopData> values) {
         this.values = values;
+        this.context=context;
         activity=(ItemClicked) context;
     }
 
-    public List getCount()
-    {
-        return MainActivity.itemCount;
-    }
+    //public List getCount()
+    //{
+       // return MainActivity.itemCount;
+    //}
     // private final Location cl;
 
     //Geocoder geocoder;
@@ -52,11 +56,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
         ImageView ivpimg;
         EditText etCountNumber;
         Button btnMinus,btnPlus;
+
         public ViewHolder(View itemView){
             super(itemView);
             tvName= itemView.findViewById(R.id.tvname);
             ivpimg=itemView.findViewById(R.id.ivpimg);
-            //etCountNumber = itemView.findViewById(R.id.etCountNumber);
             btnMinus= itemView.findViewById(R.id.btnMinus);
             btnPlus= itemView.findViewById(R.id.btnPlus);
             tvPrice= itemView.findViewById(R.id.tvPrice);
@@ -120,23 +124,43 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>  {
         Picasso.get().load(values.get(position).getImgurl()).into(holder.ivpimg);
 
         holder.tvPrice.setText(String.valueOf(values.get(position).getPrice()));
+        SharedPreferences cartprefs=context.getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE);
+        String id=MainActivity.list.get(position).getId();
+        int btnType = cartprefs.getInt(id,0);
+
+        if(btnType==0)
+        {
+            holder.btnMinus.setVisibility(View.GONE);
+            holder.btnPlus.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.btnPlus.setVisibility(View.GONE);
+            holder.btnMinus.setVisibility(View.VISIBLE);
+        }
+
 
         holder.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                MainActivity.itemCount.set(position,1);
+
                 holder.btnPlus.setVisibility(View.GONE);
                 holder.btnMinus.setVisibility(View.VISIBLE);
+                SharedPreferences.Editor editor = context.getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE).edit();
 
+                editor.putInt(values.get(position).getId(),1);
+                editor.apply();
             }
         });
         holder.btnMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    MainActivity.itemCount.set(position,0);
                 holder.btnMinus.setVisibility(View.GONE);
                 holder.btnPlus.setVisibility(View.VISIBLE);
+                SharedPreferences.Editor editor = context.getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE).edit();
+                editor.putInt(values.get(position).getId(),0);
+                editor.apply();
             }
         });
 

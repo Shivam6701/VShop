@@ -3,6 +3,8 @@ package com.example.locationfindingapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +30,9 @@ public class OrderSuccess extends AppCompatActivity {
                 "Signature:- "+sig;
         tvPayData.setText(data);
    */
-
+        SharedPreferences.Editor pref = getSharedPreferences(MainActivity.MY_PREFS_FILENAME, MODE_PRIVATE).edit();
+        pref.clear();
+        pref.apply();
         LottieAnimationView animationView=findViewById(R.id.tickSuccess);
         animationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -54,8 +58,19 @@ public class OrderSuccess extends AppCompatActivity {
 
             }
         });
-        for(int i=0;i<MainActivity.list.size();i++)
-            MainActivity.itemCount.set(i,0);
 
+        btnTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(OrderSuccess.this, MyOrderActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(OrderSuccess.this, signin_activity.class);
+        startActivity(intent);
     }
 }

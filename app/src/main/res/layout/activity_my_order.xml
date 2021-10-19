@@ -21,5 +21,17 @@
         android:text="Nothing to Show..."
         android:textSize="24sp" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderdata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
 </LinearLayout>
 </ScrollView>

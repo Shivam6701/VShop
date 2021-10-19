@@ -1,76 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FCDAD8D8">
+    android:background="#90EFEFE6"
+    >
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FCDAD8D8"
-        android:orientation="vertical"
-        tools:context=".ActivityDescription">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/below"
+        android:layout_alignParentTop="true">
 
-
-        <ImageView
-            android:id="@+id/ivIImg"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="5dp"
-            android:background="#FFFFFF"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            tools:srcCompat="@drawable/img_samp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:background="#FFFFFF"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnDesMinus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="#87CFD8"
-                android:shadowColor="#FFFFFF"
-                android:text="Remove from cart"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+            <ImageView
+                android:id="@+id/ivIImg"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="#FFFFFF"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                tools:srcCompat="@drawable/img_samp" />
 
-            <Button
-                android:id="@+id/btnDesPlus"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvDesName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="#87CFD8"
-                android:shadowColor="#FFFFFF"
-                android:text="Add to cart"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:layout_marginTop="5dp"
+                android:background="#FFFFFF"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="TextView"
+                android:textColor="#009688"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvDesPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#FFFFFF"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Price"
+                android:textColor="#43A047"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvdes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#FFFFFF"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="TextView"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteX="112dp"
+                tools:layout_editor_absoluteY="43dp" />
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/tvdes"
+    <LinearLayout
+        android:id="@+id/below"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button2cart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="#FFFFFF"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="TextView"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/capsul_button"
+            android:shadowColor="#FFFFFF"
+            android:text="open cart"
+            android:textColorLink="#CC2B2B"
             android:textSize="24sp"
-            tools:layout_editor_absoluteX="112dp"
-            tools:layout_editor_absoluteY="43dp" />
+            android:textStyle="bold"
+            app:backgroundTint="#32D81F"
+
+            app:cornerRadius="200dp" />
+
+        <Button
+            android:id="@+id/btnDesMinus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/capsul_button"
+            android:foregroundGravity="fill"
+            android:shadowColor="#FFFFFF"
+            android:text="Remove"
+            android:textSize="30sp"
+            android:textStyle="normal"
+            android:visibility="gone"
+            app:backgroundTint="#87CFD8"
+            app:cornerRadius="200dp" />
+
+        <Button
+            android:id="@+id/btnDesPlus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/capsul_button"
+            android:gravity="center"
+            android:shadowColor="#FFFFFF"
+            android:text="Add"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:backgroundTint="#87CFD8"
+            app:cornerRadius="200dp" />
     </LinearLayout>
-</ScrollView>
+
+
+</RelativeLayout>

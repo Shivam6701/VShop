@@ -1,13 +1,17 @@
 package com.example.locationfindingapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
     RecyclerView recyclerView;
     DataAdapter adapter;
     LinearLayout llProgressBar;
-    public static List<Integer> itemCount=new ArrayList<>();
+    public static  final String MY_PREFS_FILENAME = "com.example.sharedpreferences.Eshop_cart"; //name of file should be unique
+
     Intent intent;
     public  static String username,userid,userEmail;
     String ADMIN_EMAIL = "shivamkumar67016@gmail.com";
@@ -53,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         drawerLayout=findViewById(R.id.my_drawer_layout);
         actionBarDrawerToggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.nav_open,R.string.nav_close);
@@ -63,18 +67,27 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         llProgressBar=findViewById(R.id.llProgressBar);
         NavigationView navigationView=findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
-
-
         recyclerView =  findViewById(R.id.indiList);
-
         username = getIntent().getStringExtra("name");
         userid   = getIntent().getStringExtra("uid");
         userEmail= getIntent().getStringExtra("email");
+
+        try {
+            Menu menu=navigationView.getMenu();
+            MenuItem menuItem= menu.findItem(R.id.userName);
+             menuItem.setTitle(username);
+
+            if (!userEmail.equals(ADMIN_EMAIL)) {
+                MenuItem badmin=menu.findItem(R.id.admin);
+                badmin.setVisible(true);
+            }
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this, "Login error", Toast.LENGTH_SHORT).show();
+        }
         DataSource();
-
-
     }
-
         public void DataSource()
         {llProgressBar.setVisibility(View.VISIBLE);
 
@@ -112,29 +125,22 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
 
     public  void dataadapter()
     {
-        for(int i=0;i<list.size();i++)
-            itemCount.add(i,0);
-
         adapter = new DataAdapter(this,list);
         recyclerView.setHasFixedSize(true);
-
-        layoutManager = new GridLayoutManager(this,1, LinearLayoutManager.VERTICAL,false);
+        int orientation =getResources().getConfiguration().orientation;
+        if(orientation== Configuration.ORIENTATION_PORTRAIT)
+            layoutManager = new GridLayoutManager(this,2, LinearLayoutManager.VERTICAL,false);
+        else
+            layoutManager = new GridLayoutManager(this,3, LinearLayoutManager.VERTICAL,false);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main,menu);
-        MenuItem item=menu.findItem(R.id.admin);
-        if(userEmail.equals(ADMIN_EMAIL))
-        {
-            item.setVisible(true);
-        }
-        MenuItem item1=menu.findItem(R.id.userName);
-        item1.setTitle(username);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -156,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         Intent intent=new Intent(MainActivity.this,Admin_Options.class);
         startActivity(intent);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -230,11 +235,13 @@ public class MainActivity extends AppCompatActivity implements DataAdapter.ItemC
         {
 
             //if(resultCode==RESULT_OK)
-
+            SharedPreferences cartprefs=getSharedPreferences(MainActivity.MY_PREFS_FILENAME,MODE_PRIVATE);
+            String id=MainActivity.list.get(indexg).getId();
+            int btnType = cartprefs.getInt(id,0);
 
                 DataAdapter.ViewHolder vholder = (DataAdapter.ViewHolder)recyclerView.findViewHolderForLayoutPosition(indexg);
 
-                if(MainActivity.itemCount.get(indexg)==0)
+                if(btnType==0)
                 {
                     vholder.btnMinus.setVisibility(View.GONE);
                     vholder.btnPlus.setVisibility(View.VISIBLE);
